@@ -8,7 +8,7 @@
 
 * 三、自动内存管理
 
-  * [关于GC算法](zh-cn/01-GC.md)
+  * [关于GC算法](/zh-cn/01-GC.md)
 
 * 四、虚拟机执行子系统
 
@@ -16,7 +16,7 @@
 
 * 六、延伸话题
 
-  * [文献参考](zh-cn/06-References.md)
+  * [文献参考](/zh-cn/06-References.md)
   * [Java中9种常见的CMS GC问题分析与解决](https://tech.meituan.com/2020/11/12/java-9-cms-gc.html)
   * [可扩展的低延迟垃圾收集器](https://openjdk.java.net/jeps/377)
 

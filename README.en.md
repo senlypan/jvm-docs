@@ -12,6 +12,10 @@ The document currently supports reading in one languages: `Chinese`.
 
 This document is open source（GihHub:senlypan/jvm-docs），welcome to submit [issue](https://github.com/senlypan/jvm-docs/issues), contribute or recommend high-quality content about Java Virtual Machine .
 
+# Contributor
+
+Pan Shenlian, creator of Java Virtual Machine documentation, Network ID : biglate , Personal Website: http://www.panshenlian.com , Wechat Official Account: 潘潘和他的朋友们。
+
 ***
 Powered by docsify
 

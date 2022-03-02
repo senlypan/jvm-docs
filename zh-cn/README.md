@@ -1,4 +1,4 @@
-# Java虚拟机学习文档
+# Java虚拟机学习手册
 
 ![icon](http://jvm.panshenlian.com/_media/icon200.png)
 
@@ -6,11 +6,15 @@
 
 # 概述
 
-Java虚拟机文档目前支持 `中文` 语言阅读。
+Java虚拟机学习手册目前支持 `中文` 语言阅读。
 
 # 开源
 
 本文档开源（GihHub:senlypan/jvm-docs），欢迎提交 [issue](https://github.com/senlypan/jvm-docs/issues)，投稿或推荐优质Java虚拟机相关内容。
+
+# 共创
+
+潘深练，Java虚拟机学习手册发起者，网名大晚，个人网站：http://www.panshenlian.com ，微信公众号：潘潘和他的朋友们。
 
 ***
 Powered by docsify

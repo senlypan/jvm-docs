@@ -19,10 +19,31 @@
 ### jmap
 ### jhat
 
-## 可视化调优
+## 功能整合
+
+### jcmd
+### vjtools
+### arthas
+### greys
+
+## 可视化调优【简单】
 
 ### Jconsole
 ### VisualVM
+### HA
+### GCHisto
+### GCViewer
+
+## 可视化调优【进阶】
+
+### MAT
+### JProfiler
+
+## 可视化调优【在线】
+
+### gceasy
+### heaphero
+### fastthread 
 
 
 （待补充）

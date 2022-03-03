@@ -70,4 +70,5 @@
 ---
 
 <a href="http://concurrent-programming.panshenlian.com/#/zh-cn/" target="_blank" rel="noopener" title="Java并发编程文档"><img src="/_media/code.svg">Java并发编程文档</a>
+<a href="http://www.panshenlian.com/" target="_blank" rel="noopener" title="潘深练的个人网站"><img src="/_media/panshenlian.png">潘深练的个人网站</a>
 <a href="https://github.com/senlypan/jvm-docs" target="_blank" rel="noopener" title="Github"><img src="/_media/github.svg">Github</a>

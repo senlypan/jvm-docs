@@ -8,6 +8,8 @@
 
   * [走近Java](/zh-cn/02-java.md)
   * [走近JVM](/zh-cn/02-jvm.md)
+  * [JVM整体架构](/zh-cn/02-jvm-framework.md)
+  * [JVM运行时内存](/zh-cn/02-jvm-runtime-memory.md)
 
 * 三、关于GC
 

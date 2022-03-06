@@ -201,15 +201,197 @@ Java虚拟机栈中，每个栈帧都包含一个指向运行时 **常量池** �
 动态链接的作用:将符号引用转换成直接引用。
 ```
 
+![02-jvm-runtime-memory-010](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-010.jpg)
+
+**关于栈帧(Stack Frame)中的动态链接，后续仍需进一步辩证，结合编译器、类加载阶段、运行期等不同阶段时期对方法区常量池的引用。**
+
 > 方法返回地址
 
-方法返回地址存放调用该方法的PC寄存器的值。一个方法的结束，有两种方式：正常地执行完成，出现未处理的异常非正常的退出。无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。方法正常退出时，调用者的PC计数器的值作为返回地址，即调用该方法的指令的下一条指令的地址。而通过异常退出的，返回地址是要通过异常表来确定，栈帧中一般不会保存这部分信息。
+方法返回地址存放调用该方法的 **PC寄存器的值**。一个方法的结束，有两种方式：正常地执行完成，出现未处理的异常非正常的退出。无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。方法正常退出时，调用者的PC计数器的值作为返回地址，即调用该方法的指令的下一条指令的地址。而通过异常退出的，返回地址是要通过异常表来确定，栈帧中一般不会保存这部分信息。
 
 无论方法是否正常完成，都需要返回到方法被调用的位置，程序才能继续进行。
 
 ## 本地方法栈
 
+本地方法栈（Native Method Stacks） 与虚拟机栈所发挥的作用是非常相似的， 其区别只是虚拟机栈为虚拟机执行Java方法（也就是字节码） 服务， 而本地方法栈则是为虚拟机使用到的本地（Native） 方法服务。
+
+**特点**
+
+1. 本地方法栈加载native的但是方法, native类方法存在的意义当然是填补java代码不方便实现的缺陷而提出的。
+2. 虚拟机栈为虚拟机执行Java方法服务，而本地方法栈则是为虚拟机使用到的Native方法服务。
+3. 是线程私有的，它的生命周期与线程相同，每个线程都有一个。
+
+> 在Java虚拟机规范中，对本地方法栈这块区域，与Java虚拟机栈一样，规定了两种类型的异常：
+>
+> (1)StackOverFlowError: 线程请求的栈深度>所允许的深度。
+>
+> (2)OutOfMemoryError: 本地方法栈扩展时无法申请到足够的内存。
+
 ## 堆
+### Java 堆概念
+> 1、简介
+
+对于Java应用程序来说， Java堆（Java Heap） 是虚拟机所管理的内存中最大的一块。 Java堆是被所 有线程共享的一块内存区域， 在虚拟机启动时创建。 此内存区域的唯一目的就是存放对象实例， Java 世界里“几乎”所有的对象实例都在这里分配内存。“几乎”是指从实现角度来看， 随着Java语 言的发展， 现在已经能看到些许迹象表明日后可能出现值类型的支持， 即使只考虑现在， 由于即时编译技术的进步， 尤其是逃逸分析技术的日渐强大， 栈上分配、 标量替换优化手段已经导致一些微妙的变化悄然发生， 所以说Java对象实例都分配在堆上也渐渐变得不是那么绝对了。
+
+![02-jvm-runtime-memory-011](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-011.jpg)
+
+> 2、堆的特点
+
+1. 是Java虚拟机所管理的内存中最大的一块。
+2. 堆是jvm所有线程共享的。`堆中也包含私有的线程缓冲区 Thread Local Allocation Buffer (TLAB)`
+3. 在虚拟机启动的时候创建。
+4. 唯一目的就是存放对象实例，几乎所有的对象实例以及数组都要在这里分配内存。
+5. Java堆是垃圾收集器管理的主要区域。
+6. 因此很多时候java堆也被称为“GC堆”（Garbage Collected Heap）。从内存回收的角度来看，由于现在收集器基本都采用分代收集算法，所以Java堆还可以细分为：新生代和老年代；新生代又可以分为：Eden 空间、FromSurvivor空间、To Survivor空间。
+7. java堆是计算机物理存储上不连续的、逻辑上是连续的，也是大小可调节的（通过-Xms和-Xmx控制）。
+8. 方法结束后,堆中对象不会马上移出仅仅在垃圾回收的时候时候才移除。
+9. 如果在堆中没有足够的内存，来完成实例的分配，并且堆也无法再扩展时，将会抛出OutOfMemoryError异常。
+
+> 3、设置堆空间大小
+
+**内存大小-Xmx/-Xms**
+
+使用示例: -Xmx20m -Xms5m
+
+说明： 当下Java应用最大可用内存为20M， 最小内存为5M
+
+测试:
+
+```java
+public class TestVm {
+  public static void main(String[] args) {
+    //补充
+    //byte[] b=new byte[5*1024*1024];
+    //System.out.println("分配了1M空间给数组");
+    System.out.print("Xmx=");
+    System.out.println(Runtime.getRuntime().maxMemory() / 1024.0 / 1024 + "M");
+    System.out.print("free mem=");
+    System.out.println(Runtime.getRuntime().freeMemory() / 1024.0 / 1024 + "M");
+    System.out.print("total mem=");
+    System.out.println(Runtime.getRuntime().totalMemory() / 1024.0 / 1024 + "M");
+ }
+}
+```
+
+执行结果:
+
+```text
+Xmx=20.0M
+free mem=4.1877593994140625M
+total mem=6.0M
+```
+
+大家可以发现，这里打印出来的Xmx值和设置的值之间是由差异的，total Memory和最大的内存之间还是存在一定差异的，就是说JVM一般会尽量保持内存在一个尽可能底的层面，而非贪婪做法按照最大的内存来进行分配。
+
+在测试代码中新增如下语句，申请内存分配：
+
+```java
+byte[] b=new byte[4*1024*1024];
+System.out.println("分配了4M空间给数组");
+```
+
+在申请分配了4m内存空间之后，total memory上升了，同时可用的内存也上升了，可以发现其实JVM在分配内存过程中是动态的， 按需来分配的。
+
+> 4、堆的分类
+
+现在垃圾回收器都使用分代理论,堆空间也分类如下:
+
+**在Java7 Hotspot虚拟机中将Java堆内存分为3个部分：**
+
+- 青年代Young Generation
+- 老年代Old Generation
+- 永久代Permanent Generation
+
+![02-jvm-runtime-memory-012](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-012.jpg)
+
+**在Java8以后**，由于方法区的内存不在分配在Java堆上，而是存储于本地内存元空间Metaspace中，所以 **永久代就不存在** 了，在2018年9约25日 Java11 正式发布以后，从官网上找到了关于Java11中垃圾收集器的官方文档，文档中没有提到“永久代”，而只有青年代和老年代。
+
+![02-jvm-runtime-memory-013](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-013.jpg)
+
+### 年轻代和老年代
+> 1.JVM中存储java对象可以被分为两类
+
+**年轻代(Young Gen)**：年轻代主要存放新创建的对象，内存大小相对会比较小，垃圾回收会比较频繁。年轻代分成1个Eden Space和2个Suvivor Space（from 和to）。
+**年老代(Tenured Gen)**：年老代主要存放JVM认为生命周期比较长的对象（经过几次的Young Gen的垃圾回收后仍然存在），内存大小相对会比较大，垃圾回收也相对没有那么频繁。
+
+![02-jvm-runtime-memory-014](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-014.jpg)
+
+> 2.配置新生代和老年代堆结构占比
+
+默认 -XX:NewRatio=2 , 标识新生代占1 , 老年代占2 ,新生代占整个堆的1/3
+
+修改占比 -XX:NewPatio=4 , 标识新生代占1 , 老年代占4 , 新生代占整个堆的1/5
+
+Eden空间和另外两个Survivor空间占比分别为8:1:1
+
+可以通过操作选项 -XX:SurvivorRatio 调整这个空间比例。 比如 -XX:SurvivorRatio=8
+
+几乎所有的java对象都在Eden区创建, 但80%的对象生命周期都很短,创建出来就会被销毁.
+
+![02-jvm-runtime-memory-015](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-015.jpg)
+
+从图中可以看出： **堆大小** = **新生代** + **老年代**。其中，堆的大小可以通过参数 **–Xms**、**-Xmx** 来指定。
+
+默认的，新生代 ( Young ) 与老年代 ( Old ) 的比例的值为 1:2 ( 该值可以通过参数 –XX:NewRatio 来指定 )，即：新生代 ( Young ) = 1/3 的堆空间大小。老年代 ( Old ) = 2/3 的堆空间大小。
+
+其中，新生代 ( Young ) 被细分为 Eden 和 两个Survivor 区域，这两个 Survivor 区域分别被命名为 from 和 to，以示区分。 默认的，Edem : from : to = 8 : 1 : 1 ( 可以通过参数 –XX:SurvivorRatio 来设定 )，即： Eden = 8/10 的新生代空间大小，from = to = 1/10 的新生代空间大小。
+
+JVM 每次只会使用 Eden 和其中的一块 Survivor 区域来为对象服务，所以无论什么时候，总是有一块 Survivor 区域是空闲着的。因此，新生代实际可用的内存空间为 9/10 ( 即90% )的新生代空间。
+
+### 对象分配过程
+
+JVM设计者不仅需要考虑到 **内存如何分配**，**在哪里分配** 等问题，并且由于内存分配算法与内存回收算法密切相关，因此还需要考虑 **GC** 执行完内存回收后是否存在空间中间产生内存碎片。
+
+**分配过程**
+
+1. new的对象先放在伊甸园区。该区域有大小限制
+2. 当伊甸园区域填满时，程序又需要创建对象，JVM的垃圾回收器将对伊甸园预期进行垃圾回收（Minor GC）,将伊甸园区域中不再被其他对象引用的额对象进行销毁，再加载新的对象放到伊甸园区
+3. 然后将伊甸园区中的剩余对象移动到幸存者0区
+4. 如果再次触发垃圾回收，此时上次幸存下来的放在幸存者0区的，如果没有回收，就会放到幸存者1区
+5. 如果再次经历垃圾回收，此时会重新返回幸存者0区，接着再去幸存者1区。
+6. 如果累计次数到达默认的15次，这会进入养老区。可以通过设置参数，调整阈值 -XX:MaxTenuringThreshold=N
+7. 养老区内存不足是,会再次出发GC:Major GC 进行养老区的内存清理
+8. 如果养老区执行了Major GC后仍然没有办法进行对象的保存,就会报OOM异常.
+
+![02-jvm-runtime-memory-016](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-016.jpg)
+
+![02-jvm-runtime-memory-017](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-017.jpg)
+
+**分配对象的流程：**
+
+![02-jvm-runtime-memory-018](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-018.jpg)
+
+### 堆GC
+
+Java 中的堆也是 GC 收集垃圾的主要区域。GC 分为两种：
+- 一种是部分收集器（Partial GC）
+- 另一类是整堆收集器（Fu'll GC）
+
+**部分收集器**: 不是完整收集java堆的的收集器,它又分为:
+
+- 新生代收集（Minor GC / Young GC）: 只是新生代的垃圾收集
+- 老年代收集 （Major GC / Old GC）: 只是老年代的垃圾收集 ( `CMS GC 单独回收老年代` )
+- 混合收集（Mixed GC）:收集整个新生代及老年代的垃圾收集 ( `G1 GC会混合回收`, region区域回收)
+
+**整堆收集（Full GC）**:收集整个java堆和方法区的垃圾收集器
+
+**年轻代GC触发条件:**
+
+- 年轻代空间不足,就会触发Minor GC， 这里年轻代指的是Eden代满，Survivor不满不会引发GC
+- Minor GC会引发STW(stop the world) ,暂停其他用户的线程,等垃圾回收接收,用户的线程才恢复.
+
+**老年代GC (Major GC)触发机制**
+
+- 老年代空间不足时,会尝试触发MinorGC. 如果空间还是不足,则触发Major GC
+- 如果Major GC , 内存仍然不足,则报错OOM
+- Major GC的速度比Minor GC慢10倍以上.
+
+**FullGC 触发机制:**
+
+- 调用System.gc() , 系统会执行Full GC ,不是立即执行.
+- 老年代空间不足
+- 方法区空间不足
+- 通过Minor GC进入老年代平均大小大于老年代可用内存
 
 ## 元空间
 

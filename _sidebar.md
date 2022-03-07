@@ -53,9 +53,10 @@
   * [GC日志分析](/zh-cn/05-gc-log-analysis.md)
   * [JVM调优分析](/zh-cn/00-404.md)
 
-* 六、虚拟机执行子系统
+* 六、虚拟机加载机制
 
-  * [类加载子系统](/zh-cn/00-404.md)
+  * [类加载子系统](/zh-cn/06-class-loading-subsystem.md)
+  * [类加载器](/zh-cn/06-class-loader.md)
   * [类文件结构](/zh-cn/00-404.md)
   * [类加载机制](/zh-cn/00-404.md)
   * [双亲委派模型](/zh-cn/00-404.md)

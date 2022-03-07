@@ -311,8 +311,9 @@ System.out.println("分配了4M空间给数组");
 ### 年轻代和老年代
 > 1.JVM中存储java对象可以被分为两类
 
-**年轻代(Young Gen)**：年轻代主要存放新创建的对象，内存大小相对会比较小，垃圾回收会比较频繁。年轻代分成1个Eden Space和2个Suvivor Space（from 和to）。
-**年老代(Tenured Gen)**：年老代主要存放JVM认为生命周期比较长的对象（经过几次的Young Gen的垃圾回收后仍然存在），内存大小相对会比较大，垃圾回收也相对没有那么频繁。
+**年轻代(Young Gen)** ：年轻代主要存放新创建的对象，内存大小相对会比较小，垃圾回收会比较频繁。年轻代分成1个Eden Space和2个Suvivor Space（from 和to）。
+
+**年老代(Tenured Gen)** ：年老代主要存放JVM认为生命周期比较长的对象（经过几次的Young Gen的垃圾回收后仍然存在），内存大小相对会比较大，垃圾回收也相对没有那么频繁。
 
 ![02-jvm-runtime-memory-014](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-014.jpg)
 
@@ -364,29 +365,28 @@ JVM设计者不仅需要考虑到 **内存如何分配**，**在哪里分配** �
 ### 堆GC
 
 Java 中的堆也是 GC 收集垃圾的主要区域。GC 分为两种：
-- 一种是部分收集器（Partial GC）
-- 另一类是整堆收集器（Fu'll GC）
+1. 部分收集器（Partial GC）: 不是完整收集java堆的收集器
+    - 新生代收集（Minor GC / Young GC）: 只是新生代的垃圾收集
+    - 老年代收集 （Major GC / Old GC）: 只是老年代的垃圾收集 ( `CMS GC 单独回收老年代` )
+    - 混合收集（Mixed GC）:收集整个新生代及老年代的垃圾收集 ( `G1 GC会混合回收`, region区域回收)
+2. 整堆收集器（Full GC）: 收集整个java堆和方法区的垃圾收集器
 
-**部分收集器**: 不是完整收集java堆的的收集器,它又分为:
 
-- 新生代收集（Minor GC / Young GC）: 只是新生代的垃圾收集
-- 老年代收集 （Major GC / Old GC）: 只是老年代的垃圾收集 ( `CMS GC 单独回收老年代` )
-- 混合收集（Mixed GC）:收集整个新生代及老年代的垃圾收集 ( `G1 GC会混合回收`, region区域回收)
+> GC触发条件
 
-**整堆收集（Full GC）**:收集整个java堆和方法区的垃圾收集器
 
 **年轻代GC触发条件:**
 
 - 年轻代空间不足,就会触发Minor GC， 这里年轻代指的是Eden代满，Survivor不满不会引发GC
-- Minor GC会引发STW(stop the world) ,暂停其他用户的线程,等垃圾回收接收,用户的线程才恢复.
+- Minor GC会引发 `STW` (stop the world) ,暂停其他用户的线程,等垃圾回收接收,用户的线程才恢复.
 
-**老年代GC (Major GC)触发机制**
+**老年代GC (Major GC)触发条件**
 
 - 老年代空间不足时,会尝试触发MinorGC. 如果空间还是不足,则触发Major GC
 - 如果Major GC , 内存仍然不足,则报错OOM
 - Major GC的速度比Minor GC慢10倍以上.
 
-**FullGC 触发机制:**
+**FullGC 触发条件:**
 
 - 调用System.gc() , 系统会执行Full GC ,不是立即执行.
 - 老年代空间不足
@@ -395,17 +395,205 @@ Java 中的堆也是 GC 收集垃圾的主要区域。GC 分为两种：
 
 ## 元空间
 
+在JDK1.7之前，HotSpot 虚拟机把方法区当成永久代来进行垃圾回收。而从 JDK 1.8 开始，移除永久代，并把方法区移至元空间，它位于本地内存中，而不是虚拟机内存中。 HotSpots取消了永久代，那么是不是也就没有方法区了呢？当然不是，方法区是一个规范，规范没变，它就一直在，只不过取代永久代的是元空间（Metaspace）而已。它和永久代有什么不同的？
+
+**存储位置不同**：永久代 **在物理上是堆的一部分**，和新生代、老年代的地址是连续的，而元空间属于 **本地内存**。
+
+**存储内容不同**：在原来的永久代划分中，永久代用来存放类的 `元数据信息`、`静态变量`以及`常量池`等。现在类的元信
+息存储在 **元空间** 中，静态变量和常量池等并入 **堆** 中，相当于原来的永久代中的数据，被 **元空间和堆内存** 给瓜分了。
+
+![02-jvm-runtime-memory-019](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-019.jpg)
+
+> 为什么要废弃永久代，引入元空间？
+
+相比于之前的永久代划分，Oracle为什么要做这样的改进呢？
+
+- **可控性** ，在原来的永久代划分中，永久代需要存放类的元数据、静态变量和常量等。它的大小不容易确定，因为这其中有很多影响因素，比如类的总数，常量池的大小和方法数量等，-XX:MaxPermSize 指定太小很容易造成永久代内存溢出。
+- **兼容性** ，移除永久代是为融合HotSpot VM与 JRockit VM而做出的努力，因为JRockit没有永久代，不需要配置永久代
+- **复杂性** ，永久代会为GC带来不必要的复杂度，并且回收效率偏低。
+
+> 废除永久代的好处
+
+- 由于类的元数据分配在本地内存中，元空间的最大可分配空间就是系统可用内存空间。不会遇到永久代存在时的内存溢出错误。
+- 将运行时常量池从PermGen分离出来，与类的元数据分开，提升类元数据的独立性。
+- 将元数据从PermGen剥离出来到Metaspace，可以提升对元数据的管理同时提升GC效率。
+
+> Metaspace相关参数
+
+- -XX:MetaspaceSize，初始空间大小，达到该值就会触发垃圾收集进行类型卸载，同时GC会对该值进行调整：如果释放了大量的空间，就适当降低该值；如果释放了很少的空间，那么在不超过MaxMetaspaceSize时，适当提高该值。
+- -XX:MaxMetaspaceSize，最大空间，默认是没有限制的。如果没有使用该参数来设置类的元数据的大小，其最大可利用空间是整个系统内存的可用空间。JVM也可以增加本地内存空间来满足类元数据信息的存储。但是如果没有设置最大值，则可能存在bug导致Metaspace的空间在不停的扩展，会导致机器的内存不足；进而可能出现swap内存被耗尽；最终导致进程直接被系统直接kill掉。如果设置了该参数，当Metaspace剩余空间不足，会抛出：java.lang.OutOfMemoryError: Metaspace space
+- -XX:MinMetaspaceFreeRatio，在GC之后，最小的Metaspace剩余空间容量的百分比，减少为分配空间所导致的垃圾收集
+- -XX:MaxMetaspaceFreeRatio，在GC之后，最大的Metaspace剩余空间容量的百分比，减少为释放空间所导致的垃圾收集
+
+
 ## 方法区
+
+### 方法区的理解
+方法区（Method Area） 与Java堆一样， 是各个线程共享的内存区域， 它用于存储已被虚拟机加载 的类型信息、常量、 静态变量、 即时编译器编译后的代码缓存等数据。
+ 
+> 【oracle官方文档】[The Structure of the Java Virtual Machine](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4)
+
+> 《Java虚拟机规范》中明确说明：“尽管所有的方法区在逻辑上是属于堆的一部分，但些简单的实现可能不会选择去进行垃圾收集或者进行压缩”。对HotSpot而言，方法区还有一个别名叫做Non-Heap（非堆），的就是要和堆分开。
+
+**元空间（JDK8）、永久代 (JDK7) 是方法区具体的落地实现。方法区看作是一块独立于Java堆的内存空间，它主要是用来存储所加载的类信息的。**
+
+![02-jvm-runtime-memory-020](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-020.jpg)
+
+
+**创建对象各数据区域的声明：**
+
+![02-jvm-runtime-memory-021](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-021.jpg)
+
+> 方法区的特点:
+
+- 方法区与堆一样是各个线程共享的内存区域
+- 方法区在JVM启动的时候就会被创建并且它实例的物理内存空间和Java堆一样都可以不连续
+- 方法区的大小跟堆空间一样 可以选择固定大小或者动态变化
+- 方法区的对象决定了系统可以保存多少个类,如果系统定义了太多的类 导致方法区溢出虚拟机同样会跑出(OOM)异常(Java 7之前是 PermGen Space (永久代) Java 8之后 是MetaSpace(元空间) )
+- 关闭JVM就会释放这个区域的内存
+
+### 方法区结构
+
+**方法区的内部结构**
+
+![02-jvm-runtime-memory-022](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-022.jpg)
+
+
+**类加载器将Class文件加载到内存之后，将类的信息存储到方法区中。**
+
+**方法区中存储的内容：**
+- 类型信息（域信息、方法信息）
+- 运行时常量池
+
+![02-jvm-runtime-memory-023](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-023.jpg)
+
+**类型信息**
+
+对每个加载的类型（类Class、接口 interface、枚举enum、注解 annotation），JVM必须在方法区中存储以下类型信息：
+1. 这个类型的完整有效名称（全名 = 包名.类名）
+2. 这个类型直接父类的完整有效名（对于 interface或是java.lang. Object，都没有父类）
+3. 这个类型的修饰符（ public, abstract，final的某个子集）
+4. 这个类型直接接口的一个有序列表
+
+**域信息**
+
+域信息，即为类的属性，成员变量
+
+JVM必须在方法区中保存类所有的成员变量相关信息及声明顺序。
+
+域的相关信息包括：域名称、域类型、域修饰符（pυblic、private、protected、static、final、volatile、transient的某个子集）
+
+**方法信息**
+
+JVM必须保存所有方法的以下信息，同域信息一样包括声明顺序：
+1. 方法名称方法的返回类型（或void）
+2. 方法参数的数量和类型（按顺序）
+3. 方法的修饰符public、private、protected、static、final、synchronized、native,、abstract的一个子集
+4. 方法的字节码bytecodes、操作数栈、局部变量表及大小（ abstract和native方法除外）
+5. 异常表（ abstract和 native方法除外）。每个异常处理的开始位置、结束位置、代码处理在程序计数器中的偏移地址、被捕获的异常类的常量池索引
+
+### 方法区设置
+
+**方法区的大小不必是固定的，JVM可以根据应用的需要动态调整。**
+
+> jdk7及以前
+
+- 通过-xx:Permsize来设置永久代初始分配空间。默认值是20.75M
+- -XX:MaxPermsize来设定永久代最大可分配空间。32位机器默认是64M，64位机器模式是82M
+- 当JVM加载的类信息容量超过了这个值，会报异常OutofMemoryError:PermGen space。
+
+查看JDK PermSpace区域默认大小
+
+```java
+jps #是java提供的一个显示当前所有java进程pid的命令
+jinfo -flag PermSize 进程号 #查看进程的PermSize初始化空间大小
+jinfo -flag MaxPermSize 进程号 #查看PermSize最大空间
+```
+
+> JDK8以后
+
+元数据区大小可以使用参数 -XX:MetaspaceSize 和 -XX:MaxMetaspaceSize指定默认值依赖于平台。windows下，-XX:MetaspaceSize是21M，-XX:MaxMetaspaceSize的值是-1，即没有限制。
+
+与永久代不同，如果不指定大小，默认情况下，虚拟机会耗尽所有的可用系统内存。如果元数据区发生溢出，虚拟机一样会抛出异常OutOfMemoryError:Metaspace
+
+-XX:MetaspaceSize：设置初始的元空间大小。对于一个64位的服务器端JVM来说，其默认的-xx:MetaspaceSize值为21MB。这就是初始的高水位线，一旦触及这个水位线，FullGC将会被触发并卸载没用的类（即这些类对应的类加载器不再存活）然后这个高水位线将会重置。新的高水位线的值取决于GC后释放了多少元空间。如果释放的空间不足，那么在不超过MaxMetaspaceSize时，适当提高该值。如果释放空间过多，则适当降低该值。
+
+如果初始化的高水位线设置过低，上述高水位线调整情况会发生很多次。通过垃圾回收器的日志可以观察到FullGC多次调用。为了避免频繁地GC，建议将-XX:MetaspaceSize设置为一个相对较高的值。
+
+```java
+jps #查看进程号
+jinfo -flag MetaspaceSize 进程号 #查看Metaspace 最大分配内存空间
+jinfo -flag MaxMetaspaceSize 进程号 #查看Metaspace最大空间
+```
 
 ## 运行时常量池
 
+> 常量池vs运行时常量池
+
+字节码文件（.class）中，内部包含了 **常量池**。
+方法区中，内部包含了 **运行时常量池**。
+
+- **常量池**：存放编译期间生成的各种字面量与符号引用
+- **运行时常量池**：常量池表在运行时的表现形式
+
+编译后的字节码文件中包含了类型信息、域信息、方法信息等。通过ClassLoader将 **字节码文件的常量池** 中的信息加载到内存中，存储在了 **方法区的运行时常量池** 中。
+
+理解为字节码中的常量池 `Constant pool` 只是文件信息，它想要执行就必须加载到内存中。而Java程序是靠JVM，更具体的来说是JVM的执行引擎来解释执行的。执行引擎在运行时常量池中取数据，被加载的字节码常量池中的信息是放到了方法区的运行时常量池中。
+
+它们不是一个概念，存放的位置是不同的。一个在字节码文件中，一个在方法区中。
+
+![02-jvm-runtime-memory-024](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-024.jpg) 
+
+对字节码文件反编译之后，查看常量池相关信息：
+
+![02-jvm-runtime-memory-025](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-025.jpg) 
+
+要弄清楚方法区的运行时常量池，需要理解清楚字节码中的常量池。
+
+一个有效的字节码文件中除了包含类的版本信息、字段、方法以及接口等描述信息外，还包含一项信息那就是 **常量池表**（ Constant pool table），包括各种字面量和对类型、域和方法的符号引用。
+
+> 常量池，可以看做是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等类型。
+
+常量池表Constant pool table：
+
+![02-jvm-runtime-memory-026](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-026.jpg) 
+
+在方法中对常量池表的符号引用
+
+![02-jvm-runtime-memory-027](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-027.jpg) 
+
+**为什么需要常量池？**
+
+举例来说：
+
+```java
+public class Solution {
+    public void method() {
+        System.out.println("are you ok");
+    }
+}
+```
+
+这段代码很简单，但是里面却使用了 String、 System、 PrintStream及Object等结构。如果代码多，引用到的结构会更多！这里就需要常暈池，将这些引用转变为符号引用，具体用到时，才去加载。
+
 ## 直接内存
 
+> 直接内存（Direct Memory） 并不是虚拟机运行时数据区的一部分。
 
+在 **JDK 1.4** 中新加入了NIO（New Input/Output） 类， 引入了一种基于通道（Channel） 与缓冲区 （Buer） 的I/O方式， 它可以使用Native函数库直接分配堆外内存， 然后通过一个存储在Java堆里面的 DirectByteBuer对象作为这块内存的引用进行操作。 这样能在一些场景中显著提高性能， 因为避免了 在Java堆和Native堆中来回复制数据。
 
+![02-jvm-runtime-memory-028](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-028.jpg) 
 
+NIO的Buer提供一个可以直接访问系统物理内存的类——DirectBuer。DirectBuer类继承自ByteBuer，但和普通的ByteBuer不同。普通的ByteBuer仍在JVM堆上分配内存，其最大内存受到最大堆内存的 限制。而DirectBuer直接分配在物理内存中，并不占用堆空间。在访问普通的ByteBuer时，系统总是会使用一个“内核缓冲区”进行操作。而DirectBuer所处的位置，就相当于这个“内核缓冲区”。因此，使用DirectBuer是一种更加接近内存底层的方法，所以它的速度比普通的ByteBuer更快。
 
+![02-jvm-runtime-memory-029](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-029.jpg) 
 
+**通过使用堆外内存，可以带来以下好处：**
+
+1. 改善堆过大时垃圾回收效率，**减少停顿**。Full GC时会扫描堆内存，回收效率和堆大小成正比。Native的内
+存，由OS负责管理和回收。
+2. 减少内存在Native堆和JVM堆拷贝过程，**避免拷贝损耗**，降低内存使用。
+3. 可突破 **JVM内存大小限制**。
 
 
 （本篇完）

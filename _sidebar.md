@@ -10,6 +10,7 @@
   * [走近JVM](/zh-cn/02-jvm.md)
   * [JVM整体架构](/zh-cn/02-jvm-framework.md)
   * [JVM运行时内存](/zh-cn/02-jvm-runtime-memory.md)
+  * [常见内存溢出异常](/zh-cn/02-jvm-out-of-memory-error.md)
 
 * 三、关于GC
 

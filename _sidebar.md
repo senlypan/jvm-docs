@@ -16,8 +16,8 @@
 
   * [走近GC](/zh-cn/03-gc.md)
   * [GC相关概念](/zh-cn/03-gc-related.md)
-  * [引用计数法](/zh-cn/00-404.md)
-  * [可达性分析算法](/zh-cn/00-404.md)
+  * [引用计数算法](/zh-cn/03-reference-counting.md)
+  * [可达性分析算法](/zh-cn/03-reachability-analysis.md)
   * [标记-清除算法](/zh-cn/00-404.md)
   * [标记-整理算法](/zh-cn/00-404.md)
   * [标记-复制算法](/zh-cn/00-404.md)
@@ -59,7 +59,9 @@
   * [类加载器](/zh-cn/06-class-loader.md)
   * [类文件结构](/zh-cn/00-404.md)
   * [类加载机制](/zh-cn/00-404.md)
-  * [双亲委派模型](/zh-cn/00-404.md)
+  * [父级委派模型](/zh-cn/06-parents-delegation-model.md)
+  * [自定义类加载器](/zh-cn/06-define-class-loader.md)
+  * [ClassLoader源码分析](/zh-cn/06-class-loader-source-analy.md)
   * [字节码执行引擎](/zh-cn/00-404.md)
 
 * 七、程序编译与代码优化

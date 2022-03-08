@@ -14,6 +14,9 @@
 - [GC Handbook](http://www.gchandbook.org/) 
 - [JDK 15](https://openjdk.java.net/projects/jdk/15/) ZGC：可扩展的低延迟垃圾收集器
 - [Java Community Process](https://jcp.org/en/home/index)
+- [The Memory Management Reference](https://www.memorymanagement.org/)
+- [The Very Basics of Garbage Collection](https://www.memorymanagement.org/)
+- [The Memory Management Reference](http://basen.oru.se/kurser/koi/2008-2009-p1/texter/gc/index.html)
 
 
 （本篇完）

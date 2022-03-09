@@ -93,10 +93,85 @@ public class FinalizeEscapeGC {
 
 ## 再谈引用
 
+在JDK1.2以前，Java中引用的定义很传统: 如果引用类型的数据中存储的数值代表的是另一块内存的起始地址，就称这块内存代表着一个引用。这种定义有些狭隘，一个对象在这种定义下只有被引用或者没有被引用两种状态。 我们希望能描述这一类对象: 当内存空间还足够时，则能保存在内存中；如果内存空间在进行垃圾回收后还是非常紧张，则可以抛弃这些对象。很多系统中的缓存对象都符合这样的场景。 在JDK1.2之后，Java对引用的概念做了扩充，将引用分为 `强引用(Strong Reference)` 、 `软引用(Soft Reference)` 、` 弱引用(Weak Reference)` 和 `虚引用(Phantom Reference)` 四种，这四种引用的强度依次递减。
 
+> 强引用（StrongReference）
 
+**new 出的对象之类的引用，只要强引用还在，永远不会回收。**
 
+```java
+Object strongReference = new Object();
+```
 
+强引用是使用最普遍的引用。如果一个对象具有强引用，那垃圾回收器绝不会回收它。当内存空间不足，Java虚拟机宁愿抛出`OutOfMemoryError`错误，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足的问题。 ps：强引用其实也就是我们平时`A a = new A()`这个意思。
+
+> 软引用（SoftReference）
+
+**引用但非必须的对象，内存溢出异常之前，回收。**
+
+软引用可以和一个引用队列(ReferenceQueue)联合使用。如果软引用所引用对象被垃圾回收，JAVA虚拟机就会把这个软引用加入到与之关联的引用队列中。
+
+```java
+
+ReferenceQueue<String> referenceQueue = new ReferenceQueue<>();
+String str = new String("abc");
+SoftReference<String> softReference = new SoftReference<>(str, referenceQueue);
+
+str = null;
+// Notify GC
+System.gc();
+
+System.out.println(softReference.get()); // abc
+
+Reference<? extends String> reference = referenceQueue.poll();
+System.out.println(reference); //null
+
+```
+
+如果一个对象只具有软引用，则内存空间足够，垃圾回收器就不会回收它；如果内存空间不足了，就会回收这些对象的内存。只要垃圾回收器没有回收它，该对象就可以被程序使用。 软引用可以和一个引用队列（`ReferenceQueue`）联合使用，如果软引用所引用的对象被垃圾回收器回收，Java虚拟机就会把这个软引用加入到与之关联的引用队列中。
+
+> 弱引用（WeakReference）
+
+**非必须的对象，对象能生存到下一次垃圾收集发生之前。**
+
+`WeakReference`对象的生命周期基本由垃圾回收器决定，一旦垃圾回收线程发现了弱引用对象，在下一次GC过程中就会对其进行回收。
+
+```java
+String str = new String("abc");
+WeakReference<String> weakReference = new WeakReference<>(str);
+str = null;
+```
+
+用来描述那些非必须对象， 但是它的强度比软引用更弱一些， 被弱引用关联的对象只能生存到下一次垃圾收集发生为止。 当垃圾收集器开始工作， 无论当前内存是否足够， 都会回收掉只 被弱引用关联的对象。 在JDK 1.2版之后提供了`WeakReference`类来实现弱引用。 弱引用可以和一个引用队列（`ReferenceQueue`）联合使用，如果弱引用所引用的对象被垃圾回收，Java虚拟机就会把这个弱引用加入到与之关联的引用队列中。
+
+**弱引用与软引用的区别在于:**
+
+1. 更短暂的生命周期;
+2. 一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。
+
+> 虚引用（PhantomReference）
+
+**对生存时间无影响，在垃圾回收时得到通知。**
+
+“`虚引用`”顾名思义，它是最弱的一种引用关系。如果一个对象仅持有虚引用，在任何时候都可能被垃圾回收器回收。虚引用主要用来跟踪对象被垃圾回收器回收的活动。
+
+**虚引用主要用来跟踪对象被垃圾回收器回收的活动。 虚引用与软引用和弱引用的一个区别在于：**
+
+1. 虚引用必须和引用队列 （`ReferenceQueue`）联合使用。
+2. 当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。
+
+```java
+    String str = new String("abc");
+    ReferenceQueue queue = new ReferenceQueue();
+    // 创建虚引用，要求必须与一个引用队列关联
+    PhantomReference pr = new PhantomReference(str, queue);
+```
+
+程序可以通过判断引用队列中是否已经加入了虚引用，来了解被引用的对象是否将要进行垃圾回收。如果程序发现某个虚引用已经被加入到引用队列，那么就可以在所引用的对象的内存被回收之前采取必要的行动。
+
+> Java中4种引用的级别和强度由高到低依次为：强引用 -> 软引用 -> 弱引用 -> 虚引用
+
+当垃圾回收器回收时，某些对象会被回收，某些不会被回收。垃圾回收器会从根对象`Object`来标记存活的对象，然后将某些不可达的对象和一些引用的对象进行回收。
 
 （本篇完）
 

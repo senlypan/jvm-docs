@@ -21,7 +21,7 @@
   * [分代垃圾回收](/zh-cn/03-generational-collection.md)
   * [标记-清除算法](/zh-cn/03-mark-sweep.md)
   * [标记-复制算法](/zh-cn/03-mark-copying.md)
-  * [标记-压缩算法](/zh-cn/03-mark-compact.md)
+  * [标记-整理算法](/zh-cn/03-mark-compact.md)
   * [保守式GC](/zh-cn/00-404.md)
   * [增量式垃圾回收](/zh-cn/00-404.md)
   * [RC Immix 算法](/zh-cn/00-404.md)
@@ -37,7 +37,7 @@
   * [并发垃圾回收](/zh-cn/00-404.md)
   * [并发标记-清除算法](/zh-cn/00-404.md)
   * [并发复制算法](/zh-cn/00-404.md)
-  * [并发压缩算法](/zh-cn/00-404.md)
+  * [并发整理算法](/zh-cn/00-404.md)
   * [并发引用计数算法](/zh-cn/00-404.md)
   * [实时垃圾回收](/zh-cn/00-404.md)
 

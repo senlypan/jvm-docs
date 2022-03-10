@@ -11,7 +11,8 @@
 ## JDK版本
 
 ## Java语言特性
-### 历史背景
+
+![02-java#02-java-feature-000.png](../_media/image/02-java/02-java-feature-000.png)
 
 #### 汇编语言的世界
 

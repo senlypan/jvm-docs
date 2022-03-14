@@ -17,6 +17,10 @@
 - [The Memory Management Reference](https://www.memorymanagement.org/)
 - [The Very Basics of Garbage Collection](https://www.memorymanagement.org/)
 - [The Memory Management Reference](http://basen.oru.se/kurser/koi/2008-2009-p1/texter/gc/index.html)
+- [高级语言虚拟机圈子](http://hllvm.group.iteye.com/) 关于高级语言虚拟机的讨论
+- [RednaxelaFX（莫枢）](http://rednaxelafx.iteye.com/) High-Level Language VM 圈主
+- [HotSpot Internals](https://wiki.openjdk.java.net/display/HotSpot/Main) 关于OpenJDK的Wiki网站
+- [The HotSpot Group](http://openjdk.java.net/groups/hotspot/) 关于HotSpot虚拟机最新的讨论
 
 
 （本篇完）

@@ -2,7 +2,7 @@
 
 ![icon](http://jvm.panshenlian.com/_media/icon200.png)
 
-> 一本聚合全球优秀Java虚拟机内容的共创文档。
+> 一本聚合优质Java虚拟机内容的共创文档。
 
 # 概述
 

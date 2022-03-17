@@ -74,6 +74,7 @@
 
 ---
 
+<a href="http://qa.panshenlian.com/" target="_blank" rel="noopener" title="潘深练的QA手册"><img src="/_media/code.svg">潘深练的QA手册</a>
 <a href="http://concurrent-programming.panshenlian.com/#/zh-cn/" target="_blank" rel="noopener" title="Java并发编程文档"><img src="/_media/code.svg">Java并发编程文档</a>
 <a href="http://spring.panshenlian.com/" target="_blank" rel="noopener" title="Spring框架学习手册"><img src="/_media/code.svg">Spring框架学习手册</a>
 <a href="http://www.panshenlian.com/" target="_blank" rel="noopener" title="潘深练的个人网站"><img src="/_media/panshenlian.png">潘深练的个人网站</a>

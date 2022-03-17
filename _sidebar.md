@@ -58,7 +58,7 @@
   * [类加载器](/zh-cn/06-class-loader.md)
   * [类文件结构](/zh-cn/00-404.md)
   * [类加载机制](/zh-cn/00-404.md)
-  * [父级委派模型](/zh-cn/06-parents-delegation-model.md)
+  * [双亲委派模型](/zh-cn/06-parents-delegation-model.md)
   * [自定义类加载器](/zh-cn/06-define-class-loader.md)
   * [ClassLoader源码分析](/zh-cn/06-class-loader-source-analy.md)
   * [字节码执行引擎](/zh-cn/00-404.md)

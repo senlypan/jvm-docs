@@ -579,11 +579,11 @@ public class Solution {
 
 > 直接内存（Direct Memory） 并不是虚拟机运行时数据区的一部分。
 
-在 **JDK 1.4** 中新加入了NIO（New Input/Output） 类， 引入了一种基于通道（Channel） 与缓冲区 （Buer） 的I/O方式， 它可以使用Native函数库直接分配堆外内存， 然后通过一个存储在Java堆里面的 DirectByteBuer对象作为这块内存的引用进行操作。 这样能在一些场景中显著提高性能， 因为避免了 在Java堆和Native堆中来回复制数据。
+在 **JDK 1.4** 中新加入了NIO（New Input/Output） 类， 引入了一种基于通道（Channel） 与缓冲区 （Buffer） 的I/O方式， 它可以使用Native函数库直接分配堆外内存， 然后通过一个存储在Java堆里面的 DirectByteBuffer对象作为这块内存的引用进行操作。 这样能在一些场景中显著提高性能， 因为避免了 在Java堆和Native堆中来回复制数据。
 
 ![02-jvm-runtime-memory-028](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-028.jpg) 
 
-NIO的Buer提供一个可以直接访问系统物理内存的类——DirectBuer。DirectBuer类继承自ByteBuer，但和普通的ByteBuer不同。普通的ByteBuer仍在JVM堆上分配内存，其最大内存受到最大堆内存的 限制。而DirectBuer直接分配在物理内存中，并不占用堆空间。在访问普通的ByteBuer时，系统总是会使用一个“内核缓冲区”进行操作。而DirectBuer所处的位置，就相当于这个“内核缓冲区”。因此，使用DirectBuer是一种更加接近内存底层的方法，所以它的速度比普通的ByteBuer更快。
+NIO的Buffer提供一个可以直接访问系统物理内存的类——DirectBuffer。DirectBuffer类继承自ByteBuffer，但和普通的ByteBuffer不同。普通的ByteBuffer仍在JVM堆上分配内存，其最大内存受到最大堆内存的 限制。而DirectBuffer直接分配在物理内存中，并不占用堆空间。在访问普通的ByteBuffer时，系统总是会使用一个“内核缓冲区”进行操作。而DirectBuffer所处的位置，就相当于这个“内核缓冲区”。因此，使用DirectBuffer是一种更加接近内存底层的方法，所以它的速度比普通的ByteBuffer更快。
 
 ![02-jvm-runtime-memory-029](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-029.jpg) 
 

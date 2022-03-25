@@ -335,7 +335,7 @@ at java.lang.ClassLoader.defineClass(ClassLoader.java:616)
 
 ## 直接内存溢出
 
-直接内存（Direct Memory） 的容量大小可通过`-XX： MaxDirectMemorySize`参数来指定， 如果不去指定， 则默认与Java堆最大值（由-Xmx指定） 一致， 越过了`DirectByteBuer`类直接通 过反射获取`Unsafe`实例进行内存分配（`Unsafe`类的`getUnsafe()`方法指定只有引导类加载器才会返回实例， 体现了设计者希望只有虚拟机标准类库里面的类才能使用`Unsafe`的功能， 在JDK 10时才将`Unsafe` 的部分功能通过`VarHandle`开放给外部使用） ， 因为虽然使用`DirectByteBuer`分配内存也会抛出内存溢出异常， 但它抛出异常时并没有真正向操作系统申请分配内存， 而是通过计算得知内存无法分配就会在代码里手动抛出溢出异常，真正申请分配内存的方法是`Unsafe::allocateMemory()`。
+直接内存（Direct Memory） 的容量大小可通过`-XX： MaxDirectMemorySize`参数来指定， 如果不去指定， 则默认与Java堆最大值（由-Xmx指定） 一致， 越过了`DirectByteBuffer`类直接通 过反射获取`Unsafe`实例进行内存分配（`Unsafe`类的`getUnsafe()`方法指定只有引导类加载器才会返回实例， 体现了设计者希望只有虚拟机标准类库里面的类才能使用`Unsafe`的功能， 在JDK 10时才将`Unsafe` 的部分功能通过`VarHandle`开放给外部使用） ， 因为虽然使用`DirectByteBuffer`分配内存也会抛出内存溢出异常， 但它抛出异常时并没有真正向操作系统申请分配内存， 而是通过计算得知内存无法分配就会在代码里手动抛出溢出异常，真正申请分配内存的方法是`Unsafe::allocateMemory()`。
 
 ```java
 /**

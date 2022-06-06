@@ -1,5 +1,7 @@
 # 参考资料
 
+![访问统计](https://visitor-badge.glitch.me/badge?page_id=senlypan.jvm.06-references&left_color=blue&right_color=red)
+
 ## 书籍
 
 - 《[ガベージコレクションのアルゴリズムと実装](https://book.douban.com/subject/4881935/)》中村 成洋 / 相川 光

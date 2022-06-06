@@ -1,5 +1,7 @@
 # Java虚拟机学习手册
 
+![访问统计](https://visitor-badge.glitch.me/badge?page_id=senlypan.jvm.readme&left_color=blue&right_color=red)
+
 ![icon](http://jvm.panshenlian.com/_media/icon200.png)
 
 > 一本聚合优质Java虚拟机内容的共创文档。

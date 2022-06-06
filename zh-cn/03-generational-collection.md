@@ -1,5 +1,7 @@
 # 分代垃圾回收
 
+![访问统计](https://visitor-badge.glitch.me/badge?page_id=senlypan.jvm.03-generational-collection&left_color=blue&right_color=red)
+
 > 作者: 潘深练
 >
 > 更新: 2022-03-09

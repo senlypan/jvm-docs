@@ -14,6 +14,8 @@
 
 ## Java语言特性
 
+[潘深练——关于Java语言特性](https://www.panshenlian.com/2020/02/22/java-language/)
+
 ![02-java#02-java-feature-000.png](../_media/image/02-java/02-java-feature-000.png)
 
 #### 汇编语言的世界

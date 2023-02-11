@@ -20,6 +20,11 @@
 | 本地方法栈 | 线程私有 | 为虚拟机使用到的Native 方法服务 | 无 | StackOverflowError / OutOfMemoryError |
 
 
+- [脉脉 - JVM 配置参数 -D，-X，-XX 的区别](https://maimai.cn/article/detail?fid=1746100451&efid=GV6IPqNP4bUVyx7e05TVsA)
+
+- [oracle - 官网配置说明](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html)
+
+
 > JVM分为五大模块： 类装载器子系统 、 运行时数据区 、 执行引擎 、 本地方法接口 和 垃圾收集模块 。
 
 ![02-jvm-framework-002](../_media/image/02-jvm-framework/02-jvm-framework-002.png)

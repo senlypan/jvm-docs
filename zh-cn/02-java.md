@@ -103,8 +103,116 @@ struct FILE{
 - 控制流
 - 数据流
 
-#### 代码关注点
+#### 代码关注点 
 
-（本篇完）
+## QA
 
-?> 您也可以参与梳理，快来提交 [issue](https://github.com/senlypan/jvm-docs/issues) 或投稿参与吧~
+### 1、Java基础数据类型
+
+| 基础类型         | 位      | 默认值   | 取值范围 |
+| --------------- | ------- | -------- | ------- |
+| byte（位）       |  8      | 0        | -2^7 ~ 2^7-1 |
+| short（短整数）  | 16      | 0        | -2^15 ~ 2^15-1 |
+| int（整数）      | 32      | 0        | -2^31 ~ 2^31-1 |
+| long（长整数）   | 64      | 0L       | -2^63 ~ 2^63-1 |
+| float（单精度）  | 32      | 0.0f     | -2^31 ~ 2^31-1 |
+| double（双精度） | 64      | 0.0      | -2^15 ~ 2^15-1 |
+| char（字符）     | 16      | ‘\u0000’ | 0 ~ 2^16-1   |
+| boolean（布尔值）|  8      | false    | false,true   |
+
+> 1 Byte （字节）= 8 bit（比特/位）
+
+
+### 2、Integer的自动拆箱和装箱是什么意思？
+
+在Java中，自动拆箱（autoboxing）和自动装箱（autounboxing）是Java编译器自动将基本数据类型和对应的包装类对象之间进行转换的特性。
+
+自动装箱指的是将一个基本数据类型转换为其对应的包装类对象。例如，将int类型的值赋给Integer类型的变量，Java编译器会自动将int类型的值转换为对应的Integer对象，这样就可以使用Integer对象提供的方法来操作该值。
+
+```java
+int num = 10;
+Integer numObj = num; // 自动装箱，将int类型的值转换为Integer对象
+```
+
+自动拆箱指的是将一个包装类对象转换为对应的基本数据类型。例如，将Integer类型的对象赋给int类型的变量，Java编译器会自动将Integer对象中的值提取出来，转换为int类型的值，这样就可以直接使用int类型的值。
+
+```java
+Integer numObj = 10;
+int num = numObj; // 自动拆箱，将Integer对象中的值转换为int类型的值
+```
+需要注意的是，在自动拆箱和装箱操作时，有可能会出现NullPointerException异常。例如，当一个null值的包装类对象被自动拆箱时，就会抛出NullPointerException异常。因此，在使用自动拆箱和装箱操作时，需要格外小心，避免出现这种异常。
+
+### 3、equals重写还需要做什么？
+
+当我们在一个类中定义一个自定义类型时，它会继承Object类中的equals方法。Object类中的equals方法默认是使用“==”运算符来比较两个对象的引用地址是否相等。
+
+如果我们希望自定义类中的对象在逻辑上相等，即它们的属性值相等，则我们需要重写equals方法，以便在逻辑上比较对象而不是比较引用地址。
+
+当我们重写equals方法时，应该注意以下几点：
+
+1、重写equals方法时应该同时重写hashCode方法，因为这两个方法通常一起使用。
+
+2、equals方法应该比较所有的属性，而不仅仅是某些属性，以确保对象的逻辑相等。
+
+3、在比较属性时，应该使用相应类型的“equals”方法来确保正确的比较。例如，对于字符串属性，应该使用“equals”方法而不是“==”运算符来比较它们的值。
+
+4、equals方法应该是对称的、传递的和一致的，这意味着如果a.equals(b)返回true，则b.equals(a)也应该返回true，如果a.equals(b)和b.equals(c)都返回true，则a.equals(c)也应该返回true，同时在对象属性未发生变化时，重复调用equals方法应该始终返回相同的结果。
+
+5、如果我们的类是可变的（即可以更改其属性），则equals方法应该考虑对象属性的当前状态，而不仅仅是在创建对象时的状态。
+
+最后，如果我们重写了equals方法，则应该始终重写toString方法，以便在需要打印或显示对象时，可以打印出有意义的信息。
+
+[《掘金 | 为什么重写equals方法时一定要重写hashCode方法》](https://juejin.cn/post/6844904030867554317)
+
+### 4、==和equals的区别
+
+在 Java 中，"==" 和 "equals" 都可以用于比较对象，但它们有着不同的比较方式：
+
+- "==" 操作符用于比较两个对象的引用是否相等，也就是比较两个对象是否指向同一个内存地址。如果两个对象的引用地址相等，则返回 true，否则返回 false。例如：
+
+```java
+String str1 = "hello";
+String str2 = "hello";
+System.out.println(str1 == str2); // 输出 true
+```
+
+在上面的代码中，因为 str1 和 str2 都是指向字符串 "hello" 的引用，所以它们的引用地址是相等的，所以使用 "==" 进行比较返回 true。
+
+- "equals" 方法是一个在 Object 类中定义的方法，它用于比较两个对象的内容是否相等。在默认情况下，"equals" 方法会调用对象的 "==" 方法来判断两个对象的引用是否相等，但是你可以在自定义类中重写 "equals" 方法来实现自己的比较方式。例如：
+
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof Person)) {
+            return false;
+        }
+
+        Person other = (Person) obj;
+        return this.name.equals(other.name) && this.age == other.age;
+    }
+}
+```
+
+在上面的代码中，我们重写了 Person 类的 "equals" 方法，来实现按照姓名和年龄进行比较的功能。在比较时，我们先判断传入的对象是否为 null，再判断两个对象的引用是否相等，最后判断两个对象的属性是否相等。
+
+需要注意的是，如果你在自定义类中重写了 "equals" 方法，通常也需要重写 "hashCode" 方法，以保证两个相等的对象拥有相同的哈希值。
+
+
+[CSDN | 优美的讲解equals和==的区别](https://blog.csdn.net/qq_36522306/article/details/80550210)

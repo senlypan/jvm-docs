@@ -600,5 +600,22 @@ JProfiler 是我目前使用过最全面全清楚的 jvm heap dump 分析工具�
 JProfiler 下载地址： [https://www.ej-technologies.com/products/jprofiler/overview.html](https://www.ej-technologies.com/products/jprofiler/overview.html) 
 
 ### 4.8、gceasy (在线)
+
+在线工具，专门分析 GC Log 文件，当然由于是在线的，数据安全敏感的企业或服务，就建议不要使用了。
+    
+下载地址： [https://gceasy.io/](https://gceasy.io/)
+
 ### 4.9、heaphero (在线)
+    
+在线工具，专门分析 heap dump 文件，当然由于是在线的，数据安全敏感的企业或服务，就建议不要使用了。
+    
+下载地址： [https://heaphero.io/](https://heaphero.io/)
+
 ### 4.10、fastthread (在线) 
+
+在线工具，专门分析 heap dump 文件，当然由于是在线的，数据安全敏感的企业或服务，就建议不要使用了。    
+    
+下载地址： [https://fastthread.io/](https://fastthread.io/)
+
+    
+    

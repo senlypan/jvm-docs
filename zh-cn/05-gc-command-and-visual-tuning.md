@@ -23,6 +23,12 @@
 
 > 命令行推荐 arthas ，可视化界面推荐 JProfiler，此外还有一些在线的平台 gceasy、heaphero、fastthread ，美团内部的 Scalpel（一款自研的 JVM 问题诊断工具，暂时未开源）也比较好用。
 
+### 1.3、分析 dump 三驾马车
+
+- JVisualvm
+- MAT
+- JProfiler
+
 ## 二、常用指令
 
 ### 2.1、jps
@@ -531,14 +537,18 @@ public class Demo7_JConsole03 {
 
 ![](../_media/image/05-gc-command-and-visual-tuning/jconsole-5.png)
 
-### 4.2、VisualVM
+### 4.2、VisualVM （简易分析 dump 文件）
 
 VisualVM 可视化优化工具。VisualVM 是一个工具，它提供了一个可视界面，用于查看 Java 虚拟机 (Java Virtual Machine, JVM) 上运行的基于
 Java 技术的应用程序（Java 应用程序）的详细信息。VisualVM 对 Java Development Kit (JDK) 工具所检索的 JVM 软件相关数据进行组织，并通过一种使您可以快速查看有关多个 Java 应用程序的数据的方式提供该信息。您可以查看本地应用程序以及远程主机上运行的应用程序的相关数据。此外，还可以捕获有关 JVM 软件实例的数据，并将该数据保存到本地系统，以供后期查看或与其他用户共享。
 
+> 在 oracle jdk 6~8 的版本安装包中内置了 VisualVM 工具，之后 JDK 9 版本不再内置，需要根据 jdk 版本号进行下载。
+    
+VisualVM 下载地址： [https://visualvm.github.io/](https://visualvm.github.io/)
+
 #### 4.2.1、概述与插件安装
 
-VisualVM基于NetBeans平台开发, 因此它一开始就具备了插件扩展的特性, 通过插件支持, VisualVM可以做许多事情,例如:
+VisualVM 基于NetBeans平台开发, 因此它一开始就具备了插件扩展的特性, 通过插件支持, VisualVM 可以做许多事情,例如:
 
 - 显示虚拟机进程和进程的配置、环境信息(jps、jinfo)
 - 监视应用程序的CPU、GC、堆、方法区及线程的信息(jstat、jstack)
@@ -569,13 +579,25 @@ VisualVM基于NetBeans平台开发, 因此它一开始就具备了插件扩展�
 
 ![](../_media/image/05-gc-command-and-visual-tuning/visualVM-4.png)
 
-
 ### 4.3、HA
 ### 4.4、GCHisto
 ### 4.5、GCViewer 
 
-### 4.6、MAT
-### 4.7、JProfiler 
+### 4.6、MAT  （精细分析 dump 文件）
+
+Eclipse Memory Analyzer™ 提供了一个通用工具包来分析 Java heap dump 。除了堆遍历和快速计算保留大小之外，MAT 还报告泄漏疑点和内存消耗反模式，主要应用领域是内存不足错误和高内存消耗。
+
+MAT 下载地址： [https://www.eclipse.org/mat/downloads.php](https://www.eclipse.org/mat/downloads.php)
+
+> MAT 1.11 的版本支持 JDK 1.8 ， MAT 1.12 的版本支持 JDK 11** 
+
+更高的 JDK 版本，则可以使用更高版本的 MAT ，以便使用分析效果更佳的功能。
+
+### 4.7、JProfiler  （精细分析 dump 文件）
+
+JProfiler 是我目前使用过最全面全清楚的 jvm heap dump 分析工具，没有之一，付费，可以找破解版。
+
+JProfiler 下载地址： [https://www.ej-technologies.com/products/jprofiler/overview.html](https://www.ej-technologies.com/products/jprofiler/overview.html) 
 
 ### 4.8、gceasy (在线)
 ### 4.9、heaphero (在线)

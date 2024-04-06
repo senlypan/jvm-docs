@@ -16,9 +16,9 @@ This document is open source（GihHub:senlypan/jvm-docs），welcome to submit [
 
 # Contributor
 
-Pan Shenlian, creator of Java Virtual Machine documentation, Network ID : biglate , Personal Website: https://www.panshenlian.com , Wechat Official Account: 潘大晚。
+Pan Shenlian, creator of Java Virtual Machine documentation,  Personal Website: https://www.panshenlian.com , Wechat Official Account: 第一次当爸爸吖。
 
 ***
 Powered by docsify
 
-© 2020-2023 panshenlian.com 版权所有  [豫ICP备2020034308号-1](https://beian.miit.gov.cn/)
+© 2020-2024 panshenlian.com 版权所有  [豫ICP备2020034308号-1](https://beian.miit.gov.cn/)

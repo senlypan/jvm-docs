@@ -1,4 +1,4 @@
-# 经典垃圾收集器
+# 经典垃圾回收器
 
 ![访问统计](https://visitor-badge.glitch.me/badge?page_id=senlypan.jvm.03-low-latency-gc&left_color=blue&right_color=red)
 

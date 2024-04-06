@@ -243,7 +243,7 @@ Java虚拟机栈中，每个栈帧都包含一个指向运行时 **常量池** �
 2. 堆是jvm所有线程共享的。`堆中也包含私有的线程缓冲区 Thread Local Allocation Buffer (TLAB)`
 3. 在虚拟机启动的时候创建。
 4. 唯一目的就是存放对象实例，几乎所有的对象实例以及数组都要在这里分配内存。
-5. Java堆是垃圾收集器管理的主要区域。
+5. Java堆是垃圾回收器管理的主要区域。
 6. 因此很多时候java堆也被称为“GC堆”（Garbage Collected Heap）。从内存回收的角度来看，由于现在收集器基本都采用分代收集算法，所以Java堆还可以细分为：新生代和老年代；新生代又可以分为：Eden 空间、FromSurvivor空间、To Survivor空间。
 7. java堆是计算机物理存储上不连续的、逻辑上是连续的，也是大小可调节的（通过-Xms和-Xmx控制）。
 8. 方法结束后,堆中对象不会马上移出仅仅在垃圾回收的时候时候才移除。
@@ -306,7 +306,7 @@ System.out.println("分配了4M空间给数组");
 
 ![02-jvm-runtime-memory-012](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-012.jpg)
 
-**在Java8以后**，由于方法区的内存不在分配在Java堆上，而是存储于本地内存元空间Metaspace中，所以 **永久代就不存在** 了，在2018年9约25日 Java11 正式发布以后，从官网上找到了关于Java11中垃圾收集器的官方文档，文档中没有提到“永久代”，而只有青年代和老年代。
+**在Java8以后**，由于方法区的内存不在分配在Java堆上，而是存储于本地内存元空间Metaspace中，所以 **永久代就不存在** 了，在2018年9约25日 Java11 正式发布以后，从官网上找到了关于Java11中垃圾回收器的官方文档，文档中没有提到“永久代”，而只有青年代和老年代。
 
 ![02-jvm-runtime-memory-013](../_media/image/02-jvm-runtime-memory/02-jvm-runtime-memory-013.jpg)
 
@@ -371,7 +371,7 @@ Java 中的堆也是 GC 收集垃圾的主要区域。GC 分为两种：
     - 新生代收集（Minor GC / Young GC）: 只是新生代的垃圾收集
     - 老年代收集 （Major GC / Old GC）: 只是老年代的垃圾收集 ( `CMS GC 单独回收老年代` )
     - 混合收集（Mixed GC）:收集整个新生代及老年代的垃圾收集 ( `G1 GC会混合回收`, region区域回收)
-2. 整堆收集器（Full GC）: 收集整个java堆和方法区的垃圾收集器
+2. 整堆收集器（Full GC）: 收集整个java堆和方法区的垃圾回收器
 
 
 > GC触发条件

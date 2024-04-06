@@ -27,8 +27,8 @@
   * [RC Immix 算法](/zh-cn/00-404.md)
   * [其他分区策略](/zh-cn/00-404.md)
   * [GC算法比较](/zh-cn/03-gc-vs.md)
-  * [经典垃圾收集器](/zh-cn/03-classic-gc.md)
-  * [低延迟垃圾收集器](/zh-cn/03-low-latency-gc.md)
+  * [经典垃圾回收器](/zh-cn/03-classic-gc.md)
+  * [低延迟垃圾回收器](/zh-cn/03-low-latency-gc.md)
 
 * 四、关于并发GC
 

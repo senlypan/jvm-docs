@@ -34,7 +34,7 @@
 > -Xloggc:E:/logs/gc.log
 
 
-### 常用垃圾收集器参数
+### 常用垃圾回收器参数
 
 |参数 |描述|
 |------|-----|
@@ -51,7 +51,7 @@
 |MaxGCPauseMillis |设置 GC 最大的停顿时间，只在 Parallel Scavenge 收集器的时候生效|
 |CMSInitiatingOccupancyFraction |设置 CMS 收集器在老年代空间被使用多少后触发垃圾收集，默认是68%，仅在 CMS 收集器上生效|
 |CMSFullGCsBeforeCompaction |设置 CMS 收集器在进行多少次垃圾回收之后启动一次内存碎片整理|
-|UseG1GC |使用 G1 (Garbage First) 垃圾收集器|
+|UseG1GC |使用 G1 (Garbage First) 垃圾回收器|
 |MaxGCPauseMillis |设置最大GC停顿时间(GC pause time)指标(target). 这是一个软性指标(sox goal), JVM 会尽量去达成这个目标. |
 |G1HeapRegionSize| 使用G1时Java堆会被分为大小统一的的区(region)。此参数可以指定每个heap区的大小. 默认值将根据 heap size 算出最优解. 最小值为 1Mb, 最大值
 为 32Mb.|

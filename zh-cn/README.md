@@ -16,9 +16,9 @@ Java虚拟机学习手册目前支持 `中文` 语言阅读。
 
 # 共创
 
-潘深练，Java虚拟机学习手册创建者，网名大晚，个人网站：https://www.panshenlian.com ，微信公众号：潘大晚。
+潘深练，Java虚拟机学习手册创建者，个人网站：https://www.panshenlian.com ，微信公众号：第一次当爸爸吖。
 
 ***
 Powered by docsify
 
-© 2020-2023 panshenlian.com 版权所有  [豫ICP备2020034308号-1](https://beian.miit.gov.cn/)
+© 2020-2024 panshenlian.com 版权所有  [豫ICP备2020034308号-1](https://beian.miit.gov.cn/)
